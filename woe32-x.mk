@@ -4,6 +4,7 @@ PACKAGES := gmp cln ginac
 gmp_VERSION := 4.3.1
 cln_VERSION := 1.3.1
 ginac_VERSION := 1.5.5
+CONFIGURES := cln/configure ginac/configure
 ARCH := i586-mingw32msvc
 MINGW_TARGET := $(HOME)/target/$(ARCH)
 BIN_TARBALLS := $(foreach pkg, $(PACKAGES), upload/$(pkg)-$($(pkg)_VERSION)-$(ARCH).tar.bz2)
@@ -22,6 +23,9 @@ upload: $(ALL_BIN_TARBALLS) $(MD5SUMS)
 	cp -a README.html upload/index.html
 	cp -a vargs.css upload
 
+$(CONFIGURES): %/configure:
+	cd $(dir $@); autoreconf -iv
+
 $(ALL_BIN_TARBALLS): packages.stamp
 
 $(ALL_IN_ONE_TARBALL): packages.stamp
@@ -34,7 +38,7 @@ $(ALL_IN_ONE_TARBALLS:%=%.md5): %.md5: %
 	md5sum $< > $@.tmp
 	mv $@.tmp $@
 
-packages.stamp:
+packages.stamp: $(CONFIGURES)
 	stow --dir=$(MINGW_TARGET)/stow -D gmp || true
 	$(MAKE) -C mk/gmp -f woe32-x.mk
 	stow --dir=$(MINGW_TARGET)/stow -D cln || true
