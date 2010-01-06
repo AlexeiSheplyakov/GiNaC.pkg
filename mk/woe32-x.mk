@@ -156,9 +156,11 @@ install.stamp: check.stamp $(EXTRA_INSTALLS)
 	touch $@
 
 $(BIN_DBG_TBZ): install.stamp
+	mkdir -p $(dir $@)
 	tar -cjf $@ -C $(DESTDIR) $(patsubst /%, %, $(PREFIX))
 
 $(BIN_TBZ): install.stamp
+	mkdir -p $(dir $@)
 	tar -cjf $@ -C $(DESTDIR).stripped $(patsubst /%, %, $(PREFIX))
 
 $(GPG_SIGN): %.asc: %
