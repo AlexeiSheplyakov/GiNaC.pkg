@@ -174,7 +174,7 @@ being accepted:
          That said, adding support for other build system(s) is welcome. </li>
 </ul>
 Secondly, you need to write build scripts for Visual C++ (or "project files",
-or whatever m$ calls them) for ${GiNaC} and ${CLN}. <br>
+or whatever m$ calls them) for ${GiNaC} and ${CLN}. 
 <p>
 Last, but not least: <b>don't ask developers to do this work for you unless
 you are willing to pay for it</b>.
