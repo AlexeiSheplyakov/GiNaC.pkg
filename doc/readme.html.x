@@ -48,8 +48,9 @@ toolchain (compiler, assembler, linker).</b></h2>
 
 <a name="usingWithMinGW"></a>
 <h2>Using with ${MinGW}</h2>
+<p>
 First of all, install ${MinGW} and ${msys} from ${MinGW_Downloads}.
-The easiest way is to use the ${MinGW_Installer}. <br />
+The easiest way is to use the ${MinGW_Installer}. <br>
 ${BigWarning('BIG RED WARNING:')} you should install GCC version 3.4.x.
 GiNaC is known to <b>NOT</b> work with MinGW GCC versions 4.1.x, 4.2.x,
 and 4.3.x (for one, exception handling is badly broken). At the time
@@ -70,15 +71,15 @@ a number of files inside it.
 </p>
 Compile the program:
 <p class="code">
-export CPPFLAGS="-I${ginacPrefix}/include" <br />
-export LIBS="-L${ginacPrefix}/lib -lginac -lcln -lgmp" <br />
+export CPPFLAGS="-I${ginacPrefix}/include" <br>
+export LIBS="-L${ginacPrefix}/lib -lginac -lcln -lgmp" <br>
 g++ -o mycode.exe $CPPFLAGS mycode.cpp $LIBS
 </p>
 Append the directory which holds <tt>libginac-x-y-z.dll</tt>
 to the <tt>PATH</tt> environment variable, so Windows can find GiNaC, CLN,
 and other necessary DLLs, and run <tt>mycode.exe</tt>:
 <p class="code">
-export PATH=$PATH:${ginacPrefix}/bin <br />
+export PATH=$PATH:${ginacPrefix}/bin <br>
 ./mycode.exe
 </p>
 
@@ -89,8 +90,8 @@ It is almost the same as described <a href="#usingWithMinGW">previous paragraph<
 The only difference is <i>-mno-cygwin</i> compiler flag. It tells the compiler to
 build a native woe32 binary (as opposed to one using Cygwin DLL):
 <p class="code">
-export CPPFLAGS="-I${ginacPrefix}/include" <br />
-export LIBS="-L${ginacPrefix}/lib -lginac -lcln -lgmp" <br /> 
+export CPPFLAGS="-I${ginacPrefix}/include" <br>
+export LIBS="-L${ginacPrefix}/lib -lginac -lcln -lgmp" <br> 
 g++ <b>-mno-cygwin</b> -o mycode.exe $CPPFLAGS mycode.cpp $LIBS
 </p>
 
@@ -173,7 +174,8 @@ being accepted:
          That said, adding support for other build system(s) is welcome. </li>
 </ul>
 Secondly, you need to write build scripts for Visual C++ (or "project files",
-or whatever m$ calls them) for ${GiNaC} and ${CLN}. <br />
+or whatever m$ calls them) for ${GiNaC} and ${CLN}. <br>
+<p>
 Last, but not least: <b>don't ask developers to do this work for you unless
 you are willing to pay for it</b>.
 </p>
