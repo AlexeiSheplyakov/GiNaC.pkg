@@ -15,13 +15,20 @@ ALL_IN_ONE_TARBALL_DBG := $(ALL_IN_ONE_TARBALL:%.tar.bz2=%-dbg.tar.bz2)
 ALL_IN_ONE_TARBALLS := $(ALL_IN_ONE_TARBALL) $(ALL_IN_ONE_TARBALL_DBG)
 ALL_BIN_TARBALLS := $(BIN_TARBALLS) $(BIN_DBG_TARBALLS) $(ALL_IN_ONE_TARBALLS)
 $(info ALL_IN_ONE_TARBALLS = $(ALL_BIN_TARBALLS))
+RTFM := $(addprefix upload/,index.html,vargs.css)
 MD5SUMS := $(ALL_BIN_TARBALLS:%=%.md5)
 
 all: upload
 
-upload: $(ALL_BIN_TARBALLS) $(MD5SUMS)
-	cp -a README.html upload/index.html
-	cp -a vargs.css upload
+upload: $(ALL_BIN_TARBALLS) $(MD5SUMS) $(RTFM)
+
+upload/index.html: doc/readme.html.x doc/readme.py
+	if [ ! -d "$(dir $@)" ]; then mkdir -p "$(dir $@)"; fi
+	( cd doc; ./readme.py $(ginac_VERSION) $(cln_VERSION) $(gmp_VERSION) ) > $@.tmp
+	mv $@.tmp $@
+
+upload/vargs.css: doc/vargs.css
+	cp -a $< $@
 
 $(CONFIGURES): %/configure:
 	cd $(dir $@); autoreconf -iv
