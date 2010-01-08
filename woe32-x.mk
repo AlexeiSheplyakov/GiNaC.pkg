@@ -15,7 +15,7 @@ ALL_IN_ONE_TARBALL_DBG := $(ALL_IN_ONE_TARBALL:%.tar.bz2=%-dbg.tar.bz2)
 ALL_IN_ONE_TARBALLS := $(ALL_IN_ONE_TARBALL) $(ALL_IN_ONE_TARBALL_DBG)
 ALL_BIN_TARBALLS := $(BIN_TARBALLS) $(BIN_DBG_TARBALLS) $(ALL_IN_ONE_TARBALLS)
 $(info ALL_IN_ONE_TARBALLS = $(ALL_BIN_TARBALLS))
-RTFM := $(addprefix upload/,index.html,vargs.css)
+RTFM := $(addprefix upload/,index.html vargs.css)
 MD5SUMS := $(ALL_BIN_TARBALLS:%=%.md5)
 
 all: upload
