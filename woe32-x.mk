@@ -3,7 +3,7 @@
 PACKAGES := gmp cln ginac
 gmp_VERSION := 4.3.1
 cln_VERSION := 1.3.1
-ginac_VERSION := 1.5.5
+ginac_VERSION := 1.5.6
 CONFIGURES := cln/configure ginac/configure
 ARCH := i586-mingw32msvc
 MINGW_TARGET := $(HOME)/target/$(ARCH)
