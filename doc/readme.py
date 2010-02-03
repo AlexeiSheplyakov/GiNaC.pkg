@@ -2,7 +2,7 @@
 from mako.template import Template
 import sys
 
-def main(v_ginacVersion = '1.5.5', v_clnVersion = '1.3.1', v_gmpVersion = '4.3.1'):
+def main(v_ginacVersion = '1.5.6', v_clnVersion = '1.3.1', v_gmpVersion = '4.3.1'):
     mytemplate = Template(filename = 'readme.html.x')
     content = None
     try:

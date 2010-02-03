@@ -4,7 +4,7 @@
 # Linux-hosted cross-compiler and wine (and libtool 2.2.x).
 
 PACKAGE := ginac
-VERSION := 1.5.5
+VERSION := 1.5.6
 CONFIGURE_ARGS :=
 CONFIGURE_ENV = env CLN_LIBS="$(CLN_LIBS)" CLN_CFLAGS="$(CLN_CFLAGS)"
 
