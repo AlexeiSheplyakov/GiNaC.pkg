@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" href="vargs.css" type="text/css">
-<title>GiNaC ${ginacVersion} for woe32</title>
+<title>GiNaC ${ginacVersion} for Windows (MinGW)</title>
 <%
 def f_tarballUrl(ginacVersion, clnVersion, gmpVersion):
     fmt = './ginac-%s-cln-%s-gmp-%s-i586-mingw32msvc.tar.bz2'
@@ -35,9 +35,10 @@ def BigWarning(msg):
 <body>
 
 <div id="main">
-<h1 class="pagetitle">${GiNaC} for woe32</h1>
+<h1 class="pagetitle">${GiNaC} for Windows</h1>
+<hr>
 <p>
-Here is woe32 build of ${GiNaC} version ${ginacVersion}, and required
+Here is ${MinGW} build of ${GiNaC} version ${ginacVersion}, and required
 libraries: ${CLN} version ${clnVersion}, and ${GMP} version ${gmpVersion}.
 The ${tarball} (${'<a href="%s.md5">MD5 sum</a>' % tarballUrl})
 contains the headers, DLLs, import libraries, documentation (in PDF format),
@@ -104,6 +105,8 @@ It is possible to use these libraries with IDEs based on
 give more details, since I don't use any IDEs myself.
 </p>
 
+<hr>
+
 <h2>Reporting problems</h2>
 <p>
 Send bug reports, success stories, feature requests, etc. to
@@ -126,6 +129,8 @@ ${myEmail}
 	not affect results of calculations.
 	</li>
 </ul>
+
+<hr>
 
 <h2>FAQ</h2>
 
