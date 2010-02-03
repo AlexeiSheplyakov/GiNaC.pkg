@@ -174,6 +174,7 @@ $(GPG_SIGN): %.asc: %
 
 $(MD5SUMS): %.md5: %
 	md5sum $< > $@.tmp
+	sed -i -e 's/^\([0-9a-f]\+\)\([ \t]\+\).*[/]\([^/]\+\)$$/\1\2\3/g' $@.tmp
 	mv $@.tmp $@
 
 CLEANFILES := $(addsuffix .stamp,install check build config) 
