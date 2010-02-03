@@ -142,6 +142,10 @@ if [ -d $(STOWDIR) ]; then	\
 fi
 endef
 
+define fixup_pc_files
+find $(1) -type f -name '*.pc' | xargs --no-run-if-empty -n1 sed -i -e 's%^prefix=.*$$%prefix=$(2)%g'
+endef
+
 install.stamp: check.stamp $(EXTRA_INSTALLS)
 	# "Stand alone" installation
 	$(call do_install,,$(DESTDIR),$(PREFIX))
@@ -149,8 +153,10 @@ install.stamp: check.stamp $(EXTRA_INSTALLS)
 	$(call do_install,-strip,$(DESTDIR),$(PREFIX))
 	# Another copy for all-in-one tarball
 	$(call do_install,,$(GINAC_DESTDIR),$(GINAC_PREFIX))
+	$(call fixup_pc_files,$(GINAC_DESTDIR),$(GINAC_PREFIX))
 	# Yet another copy for all-in-one tarball, without debugging symbols
 	$(call do_install,-strip,$(GINAC_DESTDIR),$(GINAC_PREFIX))
+	$(call fixup_pc_files,$(GINAC_DESTDIR).stripped,$(GINAC_PREFIX))
 	# Install a copy into collection of woe32 libraries (managed by stow)
 	$(stow_install)
 	touch $@
