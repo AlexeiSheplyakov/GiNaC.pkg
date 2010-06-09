@@ -33,19 +33,21 @@ upload/vargs.css: doc/vargs.css
 $(CONFIGURES): %/configure:
 	cd $(dir $@); autoreconf -iv
 
-$(ALL_BIN_TARBALLS): packages.stamp
+PACKAGES_STAMP := build-tree/stamps/packages.stamp
 
-$(ALL_IN_ONE_TARBALL): packages.stamp
-	tar -cjf $@ -C inst/all.stripped $(patsubst /%,%,$(ALL_IN_ONE_PREFIX))
+$(ALL_BIN_TARBALLS): $(PACKAGES_STAMP)
 
-$(ALL_IN_ONE_TARBALL_DBG): packages.stamp
-	tar -cjf $@ -C inst/all $(patsubst /%,%,$(ALL_IN_ONE_PREFIX))
+$(ALL_IN_ONE_TARBALL): $(PACKAGES_STAMP)
+	tar -cjf $@ -C build-tree/inst/all.stripped $(patsubst /%,%,$(ALL_IN_ONE_PREFIX))
+
+$(ALL_IN_ONE_TARBALL_DBG): $(PACKAGES_STAMP)
+	tar -cjf $@ -C build-tree/inst/all $(patsubst /%,%,$(ALL_IN_ONE_PREFIX))
 
 $(ALL_IN_ONE_TARBALLS:%=%.md5): %.md5: %
 	md5sum $< > $@.tmp
 	mv $@.tmp $@
 
-packages.stamp: $(CONFIGURES)
+$(PACKAGES_STAMP): $(CONFIGURES)
 	stow --dir=$(MINGW_TARGET)/stow -D gmp || true
 	$(MAKE) -C mk/gmp -f woe32-x.mk
 	stow --dir=$(MINGW_TARGET)/stow -D cln || true
@@ -54,21 +56,11 @@ packages.stamp: $(CONFIGURES)
 	$(MAKE) -C mk/ginac -f woe32-x.mk
 	touch $@
 
-CLEANFILES := packages.stamp
-CLEANDIRS := inst build
-
 clean:
-	-@echo CLEAN stamps; rm -f $(CLEANFILES)
-	-@echo CLEAN ginac; $(MAKE) -C mk/ginac -f woe32-x.mk clean
-	-@echo CLEAN cln; $(MAKE) -C mk/cln -f woe32-x.mk clean
-	-@echo CLEAN gmp; $(MAKE) -C mk/gmp -f woe32-x.mk clean
+	-@echo CLEAN; rm -rf build-tree
 
 allclean:
-	-@echo CLEAN stamps; rm -f $(CLEANFILES)
-	-@echo CLEAN inst; rm -rf $(CLEANDIRS)
-	-@echo ALLCLEAN ginac; $(MAKE) -C mk/ginac -f woe32-x.mk allclean
-	-@echo ALLCLEAN cln; $(MAKE) -C mk/cln -f woe32-x.mk allclean
-	-@echo ALLCLEAN gmp; $(MAKE) -C mk/gmp -f woe32-x.mk allclean
+	-@echo CLEAN; rm -rf build-tree
 
 .PHONY: packages.stamp clean all upload
 

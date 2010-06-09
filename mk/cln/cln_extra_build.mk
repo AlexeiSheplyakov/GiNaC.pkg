@@ -2,7 +2,7 @@
 # Define rules to build and install extra targets
 
 EXTRA_INSTALLS := $(BUILDDIR)/pi.exe
-$(BUILDDIR)/pi.exe: $(SRCDIR)/examples/pi.cc check.stamp
+$(BUILDDIR)/pi.exe: $(SRCDIR)/examples/pi.cc $(CHECK_STAMP)
 	$(CXX) -I$(SRCDIR)/include -I$(BUILDDIR)/include -o $@ $< -L$(BUILDDIR)/src/.libs -lcln
 
 define do_extra_install

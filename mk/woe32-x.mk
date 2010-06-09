@@ -61,8 +61,9 @@ export CFLAGS CXXFLAGS CPPFLAGS LDFLAGS
 
 PREFIX := /opt/$(ARCH)/$(PACKAGE)-$(VERSION)
 SRCDIR := $(shell pwd)/../../$(PACKAGE)
-BUILDDIR := $(shell pwd)/../../build/$(PACKAGE)-$(VERSION)
-DESTDIR := $(shell pwd)/../../inst/$(PACKAGE)-$(VERSION)
+BUILDDIR := $(shell pwd)/../../build-tree/build/$(PACKAGE)-$(VERSION)
+DESTDIR := $(shell pwd)/../../build-tree/inst/$(PACKAGE)-$(VERSION)
+STAMPDIR := $(shell pwd)/../../build-tree/stamps
 $(info DESTDIR $(DESTDIR))
 
 # Classical cross-compilation
@@ -89,23 +90,32 @@ CONFIGURE := $(CONFIGURE_ENV) $(SHELL) $(SRCDIR)/configure \
 	--enable-shared --disable-static --prefix=$(PREFIX) \
 	$(CONFIGURE_ARGS)
 
-config: config.stamp
-build: build.stamp
-check: check.stamp
+CONFIG_STAMP := $(STAMPDIR)/config.$(PACKAGE)-$(VERSION).stamp
+BUILD_STAMP := $(STAMPDIR)/build.$(PACKAGE)-$(VERSION).stamp
+CHECK_STAMP := $(STAMPDIR)/check.$(PACKAGE)-$(VERSION).stamp
+INSTALL_STAMP := $(STAMPDIR)/install.$(PACKAGE)-$(VERSION).stamp
 
-config.stamp:
+config: $(CONFIG_STAMP)
+build: $(BUILD_STAMP)
+check: $(CHECK_STAMP)
+install: $(INSTALL_STAMP)
+
+$(CONFIG_STAMP):
 	set -e; unset CONFIG_SITE ; \
 	mkdir -p $(BUILDDIR); cd $(BUILDDIR); \
 	$(CONFIGURE)
+	if [ ! -d "$(dir $@)" ]; then mkdir -p "$(dir $@)"; fi
 	touch $@
 
-build.stamp: config.stamp
+$(BUILD_STAMP): $(CONFIG_STAMP)
 	$(MAKE) -C $(BUILDDIR)
 	$(MAKE) -C $(BUILDDIR) pdf
+	if [ ! -d "$(dir $@)" ]; then mkdir -p "$(dir $@)"; fi
 	touch $@
 
-check.stamp: build.stamp
+$(CHECK_STAMP): $(BUILD_STAMP)
 	$(MAKE) -C $(BUILDDIR) check
+	if [ ! -d "$(dir $@)" ]; then mkdir -p "$(dir $@)"; fi
 	touch $@
 
 do_extra_install := : #
@@ -146,7 +156,7 @@ define fixup_pc_files
 find $(1) -type f -name '*.pc' | xargs --no-run-if-empty -n1 sed -i -e 's%^prefix=.*$$%prefix=$(2)%g'
 endef
 
-install.stamp: check.stamp $(EXTRA_INSTALLS)
+$(INSTALL_STAMP): $(CHECK_STAMP) $(EXTRA_INSTALLS)
 	# "Stand alone" installation
 	$(call do_install,,$(DESTDIR),$(PREFIX))
 	# "Stand alone" installation without debugging symbols
@@ -159,13 +169,14 @@ install.stamp: check.stamp $(EXTRA_INSTALLS)
 	$(call fixup_pc_files,$(GINAC_DESTDIR).stripped,$(GINAC_PREFIX))
 	# Install a copy into collection of woe32 libraries (managed by stow)
 	$(stow_install)
+	if [ ! -d "$(dir $@)" ]; then mkdir -p "$(dir $@)"; fi
 	touch $@
 
-$(BIN_DBG_TBZ): install.stamp
+$(BIN_DBG_TBZ): $(INSTALL_STAMP)
 	mkdir -p $(dir $@)
 	tar -cjf $@ -C $(DESTDIR) $(patsubst /%, %, $(PREFIX))
 
-$(BIN_TBZ): install.stamp
+$(BIN_TBZ): $(INSTALL_STAMP)
 	mkdir -p $(dir $@)
 	tar -cjf $@ -C $(DESTDIR).stripped $(patsubst /%, %, $(PREFIX))
 
@@ -177,7 +188,7 @@ $(MD5SUMS): %.md5: %
 	sed -i -e 's/^\([0-9a-f]\+\)\([ \t]\+\).*[/]\([^/]\+\)$$/\1\2\3/g' $@.tmp
 	mv $@.tmp $@
 
-CLEANFILES := $(addsuffix .stamp,install check build config) 
+CLEANFILES := $(INSTALL_STAMP) $(CHECK_STAMP) $(BUILD_STAMP) $(CONFIG_STAMP)
 CLEANDIRS := $(BUILDDIR) $(DESTDIR) $(DESTDIR).stripped
 ALLCLEANFILES := $(CLEANFILES) $(MD5SUMS) $(GPG_SIGN) $(BIN_TARBALLS) 
 ALLCLEANDIRS := $(CLEANDIRS)
