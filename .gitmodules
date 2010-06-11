@@ -1,0 +1,9 @@
+[submodule "gmp"]
+	path = gmp
+	url = git://varg.org.ua/gmp.pkg.git
+[submodule "cln"]
+	path = cln
+	url = git://www.ginac.de/cln.git
+[submodule "ginac"]
+	path = ginac
+	url = git://www.ginac.de/ginac.git
