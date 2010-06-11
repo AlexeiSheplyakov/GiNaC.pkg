@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="vargs.css" type="text/css">
+<title>Cross compiling woe32 software on Linux</title>
+</head>
+<body>
+
+<div id="main">
+
+<a name="LinuxHostedCrossCompilation"></a>
+<h3>Cross compiling woe32 binaries on Linux</h3>
+<p>
+Obviously you need to install <a href="http://www.mingw.org">MinGW</a>
+cross compiler, and (optionally) <a href="http://winehq.org">wine</a>, if
+you want to test your builds (which is always a good idea). Choosing
+the right version of cross compiler is very important. You should install
+MinGW GCC version 3.4, GiNaC is known to not work with MinGW GCC 4.x 
+(where x = 1, 2, 3). You might want to try the binary packages for your
+favourite distribution if they are based on the stable (3.4) version,
+however using
+<a href="http://www.mingw.org/wiki/LinuxCrossMinGW"
+	>the official release</a> is preferred.
+<a href="http://www.debian.org/">Debian GNU/Linux</a> users, 
+<b style="color: red">BEWARE!</b> Don't use the mingw32 package shipped 
+in <a href="http://www.debian.org/releases/lenny">lenny</a>
+(the latest stable release of Debian). That package is based on the experimental
+version (4.2.2) of MinGW cross compiler and won't work with GiNaC (and most
+likely it won't work with any C++ library which uses exceptions to inform
+the user about error conditions). See e.g.  
+<a href="http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=317146"
+	>this bug report</a> for more details.
+</p>
+
+<a name="CrossCompilePrepare"></a>
+<h4>Preparations.</h4>
+First of all, unpack 
+the <a href="./ginac-1.5.5-cln-1.3.1-gmp-4.3.1-i586-mingw32msvc.tar.bz2">tarball</a>
+somewhere, for instance, in your home directory. If you intend to run the binaries
+(i.e. to test if they work at all) you need to tell wine where to look for DLLs.
+Wine tries to mimic Windows' behavior and searches DLLs in the directories listed in
+the <tt>PATH</tt> environment variable. Please note: the <tt>PATH</tt> is wine's own
+environment variable, <b>NOT</b> the *NIX one. Thus, you should add
+the <tt>$HOME/opt/i586-mingw32msvc/ginac/bin</tt> directory to wine's <tt>PATH</tt>.
+In order to change wine's <tt>PATH</tt> edit the <tt>~/.wine/system.reg</tt>
+file with your favourite text editor (search for the "PATH" string), or use
+the following script:
+<p class="code">
+cp -a ~/.wine/system.reg ~/.wine/system.reg.bak # make a copy if something goes wrong <br />
+w_path="$(winepath -w $HOME/opt/i586-mingw32msvc/ginac/bin | sed -e 's/\\/\\\\\\\\/g')" <br />
+sed -i -e "s/^\"PATH\"=\(.\+\)\"[ \t]*$/\"PATH\"=\1;${w_path}\"/g" ~/.wine/system.reg
+</p>
+Run the following command to check your setup
+<p class="code">
+wine ginsh.exe
+</p>
+The command above should start the GiNaC shell if your setup is correct.
+
+<a name="CrossCompileSimple"></a>
+<h4>Cross-compiling a simple program</h4>
+<p>
+Run the following commands in order to compile a simple program <tt>simple.cpp</tt>:
+<p class="code">
+env GINAC_PREFIX="$HOME/opt/i586-mingw32msvc/ginac" \ <br />
+<b>PKG_CONFIG_LIBDIR="${GINAC_PREFIX}/lib/pkgconfig"</b> \ # <b>(1)</b><br />
+<b>PKG_CONFIG_PATH=""</b> \ # <b>(2)</b> <br />
+i586-mingw32msvc-g++ -o simple.exe simple.cpp \
+$(pkg-config --define-variable=prefix=${GINAC_PREFIX} --cflags --libs ginac) <br />
+</p>
+<ol>
+    <li>Overrides the default path where <tt>pkg-config</tt> searches for
+        <tt>*.pc</tt> files. This is necessary to prevent pkg-config from
+	detecting native libraries. </li>
+    <li>Tell <tt>pkg-config</tt> to NOT search for <tt>*.pc</tt> files in
+        other directories. This is necessary to prevent pkg-config from
+	detecting native libraries. </li>
+</ol>
+
+If you've configured wine as described in the 
+<a href="#CrossCompilePrepare">previous paragraph</a> you can run the binary:
+<p class="code">
+wine simple.exe
+</p>
+
+<a name="CrossCompilePackage"></a>
+<h4>Cross-compiling a package using GiNaC</h4>
+<p class="code">
+PKG_CONFIG_PATH="" \ <br />
+PKG_CONFIG_LIBDIR="$HOME/opt/i586-mingw32msvc/ginac/lib/pkgconfig" \ <br />
+CC=i586-mingw32msvc-gcc \  <br />
+CXX=i586-mingw32msvc-g++ \ <br /> 
+LD=i586-mingw32msvc-ld \   <br />
+AS=i586-mingw32msvc-as \   <br />
+LDFLAGS="-Wl,--enable-auto-import" \ <br />
+./configure --host=i586-mingw32msvc \--build=--prefix=$HOME/opt/i586-mingw32msvc/foo
+</p>
+
+</div>
+</body>
+</html>

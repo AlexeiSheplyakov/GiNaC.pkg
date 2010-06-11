@@ -1,0 +1,185 @@
+/* CSS style sheet for my web pages */
+
+body {
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+}
+
+#main {
+	/* IE5.5/Win needs this or the main layer goes below the menu: */
+	position: absolute;
+	top: 20px;
+
+	/* IE5.5/Win screws up margin attribute, so
+	declare edges of content explicitly: */
+	left: 170px;
+	right: 50px;
+
+	margin: auto auto auto auto;
+	padding: 10px 10px 10px 10px;
+	border: 2px solid #808080;
+}
+
+html>body #main {
+	/* positioning */
+	position: relative;
+	left: auto;
+	right: auto;
+	top: 20px;
+	bottom: -20px;
+	margin: 0px 50px 40px 170px;
+	padding: 10px 10px 10px 10px;
+	color: black;
+	background-color: white;
+	z-index: 0;
+}
+
+#main ul { margin-right: 20px; }
+#main li { margin-bottom: 5px; }
+
+#main .pagetitle {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	text-align: center;
+}
+
+#main ol {
+	list-style-type: decimal;
+	margin-right: 20px;
+}
+
+#main div.imageright {
+	text-align: right;
+	margin: 0px 0px 10px 10px;
+	padding: 5px 5px 5px 5px;
+	float: right;
+}
+
+#main ul { list-style-type: none; }
+
+#main a:visited {
+	color: fuchsia;
+}
+
+
+#main a.int:link {
+	color: red;
+	background-color: transparent;
+}
+
+#main a.int:hover {
+	color: blue;
+	background-color: yellow;
+	text-decoration: underline;
+	font-style: italic;
+}
+
+#main a.int:visited {
+	color: purple;
+} 
+
+#main p.code {
+	color: white;
+	background-color: #606060;
+	/* black; */
+	text-align: left;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: 10px;
+}
+
+#main p.note {
+	border: 1px solid black;
+}
+
+/* Navigation menus in the left part of the screen */
+#menu {
+	position: absolute;
+	top: 20px;
+	left: 5px;
+	width: 160px;
+	z-index: 1;
+}
+
+html>body #menu {
+	position: fixed;
+}
+
+#menu div.header {
+	background-color: black;
+	border: 0px;
+}
+
+#menu div.menuitem, #menu div.header, #menu div.active {
+	font-size: 1.3em;
+	line-height: 1.5em;
+	color: #f0f0f0;
+	text-align: center;
+	margin-top: 0px;
+	margin-bottom: 5px;
+}
+
+#menu div.menuitem a, #menu div.active a {
+	display: block;
+	color: inherit;
+	font-style: normal;
+	text-decoration: none;
+}
+
+/* highlight the menu item when mouse is over */
+#menu div.menuitem, #menu div.active {
+	background-color: #606060;
+	border: 2px solid #808080;
+}
+
+/* highlight the menu item when mouse is over */
+#menu div.menuitem:hover, #menu div.active {
+	color: white;
+	background-color: #a0a0a0;
+	border-color: white;
+}
+
+/* submenu */
+#menu div.submenu {
+	font-size: 0.4em;
+	line-height: 1.2em;
+	color: inherit;
+	margin-left: 15px;
+	margin-bottom: 5px;
+	margin-top: 2px;
+	margin-right: 5px;
+	text-align: center;
+}
+
+/* each link looks like a small button inside a bigger one */
+#menu div.submenu a {
+	display: block;
+	color: inherit;
+	font-style: normal;
+	text-decoration: none;
+	border: 1px dashed #f0f0f0;
+}
+
+/* highlight the submenu item when mouse is over */
+#menu div.submenu a:hover {
+	display: block;
+	color: inherit;
+	background-color: #f0f0f0;
+	color: #606060;
+	font-style: normal;
+	text-decoration: none;
+	border: 1px dashed #808080;
+}
+
+#footer {
+	color: gray;
+	text-align: center;
+	background-color: white;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: 10px;
+}
+
+
