@@ -3,7 +3,7 @@
 # Linux-hosted cross-compiler and wine (and libtool 2.2.x).
 
 PACKAGE := gmp
-VERSION := 4.3.1
+VERSION := 5.0.1
 CONFIGURE_ARGS := --enable-fat --enable-cxx
 
 include ../woe32-x.mk
