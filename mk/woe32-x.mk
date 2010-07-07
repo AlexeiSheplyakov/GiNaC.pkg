@@ -8,7 +8,7 @@ ARCH := i586-mingw32msvc
 MINGW_TARGET := $(HOME)/target/$(ARCH)
 STOWDIR := $(MINGW_TARGET)/stow
 GINAC_PREFIX := /opt/$(ARCH)/ginac
-GINAC_DESTDIR := $(shell pwd)/../../inst/all
+GINAC_DESTDIR := $(shell pwd)/../../build-tree/inst/all
 
 # What to build:
 BIN_TBZ := $(shell pwd)/../../upload/$(PACKAGE)-$(VERSION)-$(ARCH).tar.bz2
