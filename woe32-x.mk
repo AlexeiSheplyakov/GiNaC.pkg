@@ -18,6 +18,10 @@ $(info ALL_IN_ONE_TARBALLS = $(ALL_BIN_TARBALLS))
 RTFM := $(addprefix upload/,index.html vargs.css)
 MD5SUMS := $(ALL_BIN_TARBALLS:%=%.md5)
 
+# FIXME: makeinfo fails due to wrong grep call in all locales except C
+LC_ALL := C
+export LC_ALL
+
 all: upload
 
 upload: $(ALL_BIN_TARBALLS) $(MD5SUMS) $(RTFM)
