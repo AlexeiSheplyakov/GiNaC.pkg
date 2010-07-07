@@ -53,9 +53,9 @@ toolchain (compiler, assembler, linker).</b></h2>
 First of all, install ${MinGW} and ${msys} from ${MinGW_Downloads}.
 The easiest way is to use the ${MinGW_Installer}. <br>
 ${BigWarning('BIG RED WARNING:')} you should install GCC version 3.4.x.
-GiNaC is known to <b>NOT</b> work with MinGW GCC versions 4.1.x, 4.2.x,
-and 4.3.x (for one, exception handling is badly broken). At the time
-of writing the ${MinGW_Installer} picks the right version by default.
+GiNaC is known to <b>NOT</b> work with MinGW GCC versions 4.x (for one,
+cross-DLL exceptions are broken). At the time of writing
+the ${MinGW_Installer} picks the right version by default.
 </p>
 
 <h3>Compiling and running a simple program.</h3>
