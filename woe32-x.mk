@@ -59,10 +59,12 @@ $(PACKAGES_STAMP): $(CONFIGURES)
 	touch $@
 
 clean:
-	-@echo CLEAN; rm -rf build-tree
+	-@echo CLEAN build-tree; rm -rf build-tree
 
 allclean:
-	-@echo CLEAN; rm -rf build-tree
+	-@echo CLEAN build-tree; rm -rf build-tree
+	-@echo CLEAN cln; cd cln; git clean -d -f
+	-@echo CLEAN ginac; cd ginac; git clean -d -f
 
 .PHONY: packages.stamp clean all upload
 
