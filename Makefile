@@ -51,11 +51,11 @@ $(ALL_IN_ONE_TARBALLS:%=%.md5): %.md5: %
 
 $(PACKAGES_STAMP): $(CONFIGURES)
 	stow --dir=$(MINGW_TARGET)/stow -D gmp || true
-	$(MAKE) -C mk/gmp -f woe32-x.mk PACKAGE=gmp VERSION=$(gmp_VERSION)
+	$(MAKE) -C mk/gmp PACKAGE=gmp VERSION=$(gmp_VERSION)
 	stow --dir=$(MINGW_TARGET)/stow -D cln || true
-	$(MAKE) -C mk/cln -f woe32-x.mk PACKAGE=cln VERSION=$(cln_VERSION)
+	$(MAKE) -C mk/cln PACKAGE=cln VERSION=$(cln_VERSION)
 	stow --dir=$(MINGW_TARGET)/stow -D ginac || true
-	$(MAKE) -C mk/ginac -f woe32-x.mk PACKAGE=ginac VERSION=$(ginac_VERSION)
+	$(MAKE) -C mk/ginac PACKAGE=ginac VERSION=$(ginac_VERSION)
 	touch $@
 
 clean:

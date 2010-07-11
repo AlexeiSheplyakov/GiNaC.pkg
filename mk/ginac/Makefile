@@ -1,0 +1,6 @@
+
+CONFIGURE_ARGS :=
+CONFIGURE_ENV = env CLN_LIBS="$(CLN_LIBS)" CLN_CFLAGS="$(CLN_CFLAGS)"
+
+include ../common.mk
+
