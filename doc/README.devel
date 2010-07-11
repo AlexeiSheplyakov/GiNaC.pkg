@@ -1,0 +1,59 @@
+Prerequisites.
+==============
+
+1. Linux hosted MinGW cross-compiler, version 3.4.x. Versions 4.x known
+   to NOT work due to problems with cross-DLL exceptions.
+   Also you need corresponding headers, binutils, and runtime.
+2. wine
+3. git (>= 1.5.3)
+4. auto* tools: autoconf (>= 2.65), automake (>= 1.11.1), libtool (>= 2.2.8)
+   Note: earlier versions of libtool has poor support for Linux -> Windows
+   cross compilation.
+5. GNU make
+6. bison (>= 2.3), flex (>= 2.5.33)
+7. autogen (>= 5.6.0)
+8. ccache
+9. GNU stow
+10. doxygen, and TeX 
+
+Initial setup.
+==============
+
+One need create the installation directory for MinGW packages, and explain
+wine that there are (will be) some DLLs in it.
+
+BIG RED WARNING: if you have some Windows software installed and configured
+under wine, you'd better create a different account for cross-compilation
+activities (using a different WINEPREFIX won't help, sorry).
+
+mingw_prefix="$HOME/target/i586-mingw32msvc"
+mkdir -p ${mingw_prefix}/stow ${mingw_prefix}/bin
+wineconsole cmd /c "exit" # this initializes ~/.wine
+( cd ~/.wine/dosdevices; ln -s ../../target/i586-mingw32msvc x: )
+w_bin_path="$(winepath -w ${mingw_prefix}/bin | sed -e 's/\\/\\\\\\\\/g')"
+sed -i -e "s/^\"PATH\"=\(.\+\)\"[ \t]*$/\"PATH\"=\1;${w_bin_path}\"/g" ~/.wine/system.reg
+
+Downloading the source.
+=======================
+
+Clone the repository
+
+git clone git://varg.org.ua/ginac.pkg.git
+cd ginac.pkg
+git submodule init
+git submodule update
+
+or, if you've already done so, update your copy
+
+cd ginac.pkg
+git update
+git submodule update
+
+Compiling the thing.
+====================
+
+make
+
+this will compile GMP, CLN, and GiNaC, and produce binary tarballs in
+the `upload' subdirectory.
+
