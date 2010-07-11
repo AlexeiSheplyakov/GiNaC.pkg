@@ -2,6 +2,13 @@
 # Compile a package for woe32 on Linux (either x86-64 or x86-32)
 # using MinGW Linux-hosted cross-compiler and wine (and libtool 2.2.x).
 
+ifeq ($(strip $(PACKAGE)),)
+	$(error PACKAGE is not set)
+endif
+ifeq ($(strip $(VERSION)),)
+	$(error VERSION for $(PACKAGE) is not set)
+endif
+
 # Different distros call MinGW compiler in different ways
 ARCH := i586-mingw32msvc
 
