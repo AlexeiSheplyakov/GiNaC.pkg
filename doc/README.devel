@@ -38,14 +38,14 @@ Downloading the source.
 
 Clone the repository
 
-git clone git://varg.org.ua/ginac.pkg.git
-cd ginac.pkg
+git clone git://github.com/AlexeiSheplyakov/GiNaC.pkg.git
+cd GiNaC.pkg
 git submodule init
 git submodule update
 
 or, if you've already done so, update your copy
 
-cd ginac.pkg
+cd GiNaC.pkg
 git update
 git submodule update
 
