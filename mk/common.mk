@@ -10,7 +10,7 @@ ifeq ($(strip $(VERSION)),)
 endif
 
 # Different distros call MinGW compiler in different ways
-ARCH := i586-mingw32msvc
+include mingw.conf
 
 MINGW_TARGET := $(HOME)/target/$(ARCH)
 STOWDIR := $(MINGW_TARGET)/stow
@@ -55,7 +55,7 @@ export CC CXX AS LD NM AR RANLIB DLLTOOL WINDRES OBJDUMP STRIP
 # XXX: libtool cross compilation with wine works only with bash
 SHELL := /bin/bash
 CONFIG_SHELL := /bin/bash
-PATH := /usr/$(ARCH)/bin:/bin:/usr/bin
+PATH := $(MINGW_PREFIX)/bin:/bin:/usr/bin
 export SHELL CONFIG_SHELL PATH
 
 # Compile for generic pentium-compatible CPU.
