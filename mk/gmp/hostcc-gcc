@@ -2,5 +2,5 @@
 # Sometimes we need to compile a binary for $build (to run it during
 # the build). We need to reset PATH so x-compiler/assembler are NOT
 # in the PATH. Hence this silly script
-export PATH=/bin:/usr/bin
-exec ${HOSTCC:-gcc-4.3} $@
+export PATH=/bin:/usr/bin:/mingw/bin
+exec ${HOSTCC:-gcc} $@
