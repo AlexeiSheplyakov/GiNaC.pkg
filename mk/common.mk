@@ -63,8 +63,11 @@ CFLAGS := -O2 -g -Wall -pipe -march=i686
 CXXFLAGS := $(CFLAGS)
 CPPFLAGS :=
 LDFLAGS :=
+CPPFLAGS += -I$(GINAC_DESTDIR)$(GINAC_PREFIX)/include
+LDFLAGS += -L$(GINAC_DESTDIR)$(GINAC_PREFIX)/lib
+PKG_CONFIG_PATH := $(GINAC_DESTDIR)$(GINAC_PREFIX)/lib/pkgconfig
 include $(PACKAGE)_cflags.mk
-export CFLAGS CXXFLAGS CPPFLAGS LDFLAGS
+export CFLAGS CXXFLAGS CPPFLAGS LDFLAGS PKG_CONFIG_PATH
 
 PREFIX := /opt/$(ARCH)/$(PACKAGE)-$(VERSION)
 SRCDIR := $(shell pwd)/../../$(PACKAGE)
@@ -91,6 +94,12 @@ endef
 define config_guess
 $(SRCDIR)/$(if $(ac_config_aux_dir),$(ac_config_aux_dir)/,)config.guess
 endef
+
+define pkgconfig
+$(strip $(shell set -e; export PKG_CONFIG_PATH=$(PKG_CONFIG_PATH); \
+		pkg-config --define-variable=prefix=$(GINAC_DESTDIR)$(GINAC_PREFIX) $(1)))
+endef
+
 
 CONFIGURE := $(CONFIGURE_ENV) $(SHELL) $(SRCDIR)/configure \
 	--host=$(ARCH) --build=$(shell $(config_guess)) \
