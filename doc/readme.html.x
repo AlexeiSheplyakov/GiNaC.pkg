@@ -6,7 +6,7 @@
 <title>GiNaC ${ginacVersion} for Windows (MinGW)</title>
 <%
 def f_tarballUrl(ginacVersion, clnVersion, gmpVersion):
-    fmt = './ginac-%s-cln-%s-gmp-%s-i586-mingw32msvc.tar.bz2'
+    fmt = './ginac-%s-cln-%s-gmp-%s-i686-w64-mingw32.tar.bz2'
     return fmt % ( ginacVersion, clnVersion, gmpVersion )
 
 tarballUrl = f_tarballUrl(ginacVersion, clnVersion, gmpVersion)
@@ -16,13 +16,14 @@ GiNaC = '<a href="http://www.ginac.de">GiNaC</a>'
 CLN = '<a href="http://www.ginac.de/CLN">CLN</a>'
 CLN_MailList = '<a href="https://www.ginac.de/mailman/listinfo/cln-list">CLN mailing list</a>'
 GMP = '<a href="http://gmplib.org">GMP</a>'
+TDM_GCC = '<a href="http://tdm-gcc.tdragon.net">TDM-GCC</a>'
+TDM_GCC_Installer = '<a href="http://sourceforge.net/projects/tdm-gcc/files/TDM-GCC%20Installer/tdm64-gcc-4.5.2.exe">installer</a>'
+MinGW_W64 = '<a href="http://mingw-w64.sourceforge.net">MinGW-w64</a>'
 MinGW = '<a href="http://www.mingw.org">MinGW</a>'
-MinGW_Downloads = '<a href="http://www.mingw.org/download.shtml">MinGW download page</a>'
 Cygwin = '<a href="http://www.cygwin.com">Cygwin</a>'
 msys = '<a href="http://www.mingw.org/msys.shtml">msys</a>'
-MinGW_Installer = '<a href="http://sourceforge.net/projects/mingw/files/Automated%20MinGW%20Installer/MinGW%205.1.6/MinGW-5.1.6.exe/download">automated MinGW installer</a>'
-
-ginacPrefix = '/opt/i586-mingw32msvc/ginac'
+ginacPrefix = '/opt/i686-w64-mingw32/ginac'
+ginacPrefixWoe32 = 'C:\\GiNaC\\opt\\i686-w64-mingw32\\ginac'
 
 
 myEmail = '&#65;&#108;&#101;&#120;&#101;&#105;&#46;&#83;&#104;&#101;&#112;&#108;&#121;&#97;&#107;&#111;&#118;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;'
@@ -46,63 +47,62 @@ and utilities (<tt>ginsh</tt>, <tt>viewgar</tt>, and <tt>pi</tt>).
 </p>
 <h2 style="color: red"><b>Note: these packages can be used only with GNU
 toolchain (compiler, assembler, linker).</b></h2>
-
-<a name="usingWithMinGW"></a>
-<h2>Using with ${MinGW}</h2>
+<h2>Supported compilers</h2>
 <p>
-First of all, install ${MinGW} and ${msys} from ${MinGW_Downloads}.
-The easiest way is to use the ${MinGW_Installer}. <br>
-${BigWarning('BIG RED WARNING:')} you should install GCC version 3.4.x.
-GiNaC is known to <b>NOT</b> work with MinGW GCC versions 4.x (for one,
-cross-DLL exceptions are broken). At the time of writing
-the ${MinGW_Installer} picks the right version by default.
+GCC version &#gt;= 4.4 should work (both ${MinGW} and ${MinGW_W64} flavours).
 </p>
 
-<h3>Compiling and running a simple program.</h3>
+<a name="install"></a>
+<h2>Installation</h2>
+<p>
+First of all, install the GNU compiler itself. The easiest ways is to use
+the ${TDM_GCC} ${TDM_GCC_Installer}.
+</p>
+<p>
+Next, unpack the ${tarball} somewhere, say <tt>C:\GiNaC</tt>, and add
+the <tt>${ginacPrefixWoe32}\bin</tt> directory to the <tt>PATH</tt>
+environment variable.
+</p>
+
+<h2>Compiling and running a simple program.</h2>
 <p>
 Suppose we want to compile a simple program <tt>mycode.cpp</tt> which uses
-${GiNaC}. This can be done in several ways.
+${GiNaC}. This can be done in a several ways.
 </p>
 
-<h4>Using ${msys} environment.</h4>
+<h3>Using the command prompt (<tt>cmd.exe</tt>)</h3>
 <p>
-Start the ${msys} shell, unpack the ${tarball} somewhere (e.g. into the root
-directory), this will create <i>${ginacPrefix}</i> directory and quite 
-a number of files inside it.
+Start the shell (<tt>Start</tt> -&#gt; <tt>Run</tt> cmd.exe), and and compile
+the program:
 </p>
-Compile the program:
 <p class="code">
-export CPPFLAGS="-I${ginacPrefix}/include" <br>
-export LIBS="-L${ginacPrefix}/lib -lginac -lcln -lgmp" <br>
-g++ -o mycode.exe $CPPFLAGS mycode.cpp $LIBS
+set CPPFLAGS=-I"${ginacPrefixWoe32}\include" <br>
+set LDFLAGS=-L"${ginacPrefixWoe32}\lib"
+g++ -o mycode.exe %CPPFLAGS% %LDFLAGS% mycode.cpp -lginac -lcln -lgmp
 </p>
-Append the directory which holds <tt>libginac-x-y-z.dll</tt>
-to the <tt>PATH</tt> environment variable, so Windows can find GiNaC, CLN,
-and other necessary DLLs, and run <tt>mycode.exe</tt>:
+Make sure <tt>${ginacPrefixWoe32}\bin</tt> is in the <tt>PATH</tt>, and run
+the program:
 <p class="code">
-export PATH=$PATH:${ginacPrefix}/bin <br>
-./mycode.exe
+.\mycode.exe
 </p>
 
-<a name="usingWithCygwin"></a>
-<h4>Using ${Cygwin}.</h4>
+<h3>Using the ${msys} environment.</h3>
 <p>
-It is almost the same as described <a href="#usingWithMinGW">previous paragraph</a>.
-The only difference is <i>-mno-cygwin</i> compiler flag. It tells the compiler to
-build a native woe32 binary (as opposed to one using Cygwin DLL):
+Start the ${msys} shell, and run the following commands:
+</p>
 <p class="code">
 export CPPFLAGS="-I${ginacPrefix}/include" <br>
-export LIBS="-L${ginacPrefix}/lib -lginac -lcln -lgmp" <br> 
-g++ <b>-mno-cygwin</b> -o mycode.exe $CPPFLAGS mycode.cpp $LIBS
+export LDFLAGS="-L${ginacPrefix}/lib" <br>
+g++ -o mycode.exe $CPPFLAGS $LDFLAGS mycode.cpp -lginac -lcln -lgmp
 </p>
 
 <a name="usingWithIDEs"></a>
-<h4>Other ways.</h4>
+<h3>Other ways.</h3>
 <p>
-It is possible to use these libraries with IDEs based on
+It is possible to use these libraries with IDEs supporting
 <a href="http://gcc.gnu.org">the GNU Compiler Collection</a>, such as
-<a href="http://www.codeblocks.org">Code::Blocks</a>. Sorry, I can't
-give more details, since I don't use any IDEs myself.
+<a href="http://qt.nokia.com/products/developer-tools">Qt Creator</a>,
+<a href="http://www.codeblocks.org">Code::Blocks</a>, etc.
 </p>
 
 <hr>
