@@ -1,11 +1,16 @@
 
 CXXFLAGS += -finline-limit=1200
 # This linker flags are necessary in order to build the DLL.
-LDFLAGS += -Wl,--enable-auto-import -Wl,--export-all-symbols -no-undefined
+LDFLAGS += -Wl,--enable-auto-import -Wl,--export-all-symbols
 
-CLN_CFLAGS := $(call pkgconfig, --cflags cln)
-CLN_LIBS := $(call pkgconfig, --libs cln)
+CLN_CFLAGS :=
+CLN_LIBS := -lcln
+export CLN_CFLAGS CLN_LIBS
 
-CPPFLAGS += -I$(MINGW_TARGET)/include $(CLN_CFLAGS)
-LDFLAGS += -L$(MINGW_TARGET)/lib $(call pkgconfig, --libs-only-L cln)
+# Convince libtool to produce a shared library. Note: this switch can NOT
+# be passed via LDFLAGS since GCC bails out on any unknown flags
+EXTRA_LDFLAGS += -no-undefined
+
+CPPFLAGS += $(CLN_CFLAGS)
+LDFLAGS += $(CLN_LIBS)
 

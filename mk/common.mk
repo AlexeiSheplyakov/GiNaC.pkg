@@ -66,6 +66,15 @@ LDFLAGS :=
 CPPFLAGS += -I$(GINAC_DESTDIR)$(GINAC_PREFIX)/include
 LDFLAGS += -L$(GINAC_DESTDIR)$(GINAC_PREFIX)/lib
 PKG_CONFIG_PATH := $(GINAC_DESTDIR)$(GINAC_PREFIX)/lib/pkgconfig
+# XXX: In order to convince libtool to create a shared library one need to
+# pass the `-no-undefined' switch. The most straightforward way is to append
+# it to LDFLAGS. It should be noted that GCC has no idea what -no-undefined
+# is. Older GCCs used to ignore unknown switches (which seems to be a good
+# idea). However, recent versions of GCC bail out on any unknown switches,
+# so passing `-no-undefined' via LDFLAGS won't work: configure will complain
+# that `No working C compiler was found'. Hence we introduce EXTRA_LDFLAGS
+# and pass to `make' only (which in turn passes it to libtool).
+EXTRA_LDFLAGS :=
 include $(PACKAGE)_cflags.mk
 export CFLAGS CXXFLAGS CPPFLAGS LDFLAGS PKG_CONFIG_PATH
 
@@ -124,13 +133,13 @@ $(CONFIG_STAMP):
 	touch $@
 
 $(BUILD_STAMP): $(CONFIG_STAMP)
-	$(MAKE) -C $(BUILDDIR)
+	$(MAKE) -C $(BUILDDIR) LDFLAGS="$(LDFLAGS) $(EXTRA_LDFLAGS)"
 	$(MAKE) -C $(BUILDDIR) pdf
 	if [ ! -d "$(dir $@)" ]; then mkdir -p "$(dir $@)"; fi
 	touch $@
 
 $(CHECK_STAMP): $(BUILD_STAMP)
-	$(MAKE) -C $(BUILDDIR) check
+	$(MAKE) -C $(BUILDDIR) check LDFLAGS="$(LDFLAGS) $(EXTRA_LDFLAGS)"
 	if [ ! -d "$(dir $@)" ]; then mkdir -p "$(dir $@)"; fi
 	touch $@
 
