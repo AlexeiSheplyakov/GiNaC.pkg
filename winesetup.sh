@@ -17,7 +17,7 @@ done
 
 if ! grep -q -e '^["]PATH["]=.*;X:\\\\bin' "${WINEPREFIX}/system.reg"; then
 	echo "Setting up PATH for wine"
-	sed -i -e '/^["]PATH["]=/ { s/["]$/;Y:\\\\bin;X:\\\\bin"/ ; }' "${WINEPREFIX}/system.reg"
+	sed -i -e '/^["]PATH["]=/ { s/["]$/;Y:\\\\;X:\\\\bin"/ ; }' "${WINEPREFIX}/system.reg"
 fi
 
 if [ -z "${DESTDIR}" ]; then
@@ -32,11 +32,12 @@ ln -s "${DESTDIR}${prefix}" "${WINEPREFIX}/dosdevices/x:"
 
 mingw_conf=`dirname $0`/conf/mingw.conf
 if [ -r "${mingw_conf}" ]; then
-	MINGW_PREFIX="$(sed -n -e 's/^MINGW_PREFIX[ \t]*[:]*[=][ \t]*\(.*\)$/\1/p' ${mingw_conf})"
+	ARCH="$(sed -n -e 's/^ARCH[ \t]*[:]*[=][ \t]*\(.*\)$/\1/p' ${mingw_conf})"
 fi
-if [ -z "$MINGW_PREFIX" ]; then
-	MINGW_PREFIX="/usr/local/mingw-w64"
+if [ -z "$ARCH" ]; then
+	ARCH="i686-w64-mingw32"
 fi
+runtime_dir="$(dirname `${ARCH}-gcc -print-libgcc-file-name`)"
 
-ln -s "${MINGW_PREFIX}" "${WINEPREFIX}/dosdevices/y:"
+ln -s "${runtime_dir}" "${WINEPREFIX}/dosdevices/y:"
 
